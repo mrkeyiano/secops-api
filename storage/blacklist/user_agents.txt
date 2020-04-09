@@ -1,0 +1,167 @@
+BLEXBot
+Wget/1.6
+Wget/1.5.3
+FairAd Client
+URL_Spider_Pro
+Mozilla
+turingos
+Python-urllib
+Teleport
+Stanford Comp Sci
+grub-client
+WebBandit/3.50
+ia_archiver/1.6
+ProPowerBot/2.14
+naver
+RepoMonkey
+Mozilla/4.0 (compatible; MSIE 4.0; Windows 2000)
+SpankBot
+WebZip
+moget/2.1
+gigabot
+Xenu's Link Sleuth 1.1c
+spanner
+NetMechanic
+CheeseBot
+Zeus 32297 Webster Pro V2.9 Win32
+Jetbot
+Mozilla/4.0 (compatible; MSIE 4.0; Windows 98)
+sootle
+WebCopier
+LNSpiderguy
+Mozilla/4.0 (compatible; BullsEye; Windows 95)
+CopyRightCheck
+mozilla
+EmailWolf
+Keyword Density/0.9
+WebmasterWorld Extractor
+CherryPickerSE/1.0
+moget
+es
+Webster Pro
+ExtractorPro
+Microsoft URL Control - 5.01.4511
+Openfind
+exabot
+Hatena Antenna
+psbot
+TheNomad
+AhrefsBot
+http://www.SearchEngineWorld.com bot
+rogerbot
+suzuran
+WWW-Collector-E
+EmailCollector
+PerMan
+WebAuto
+GetRight/4.2
+mozilla/4
+VCI WebViewer VCI WebViewer Win32
+Xenu's
+ia_archiver
+BackDoorBot/1.0
+Jetbot/1.0
+humanlinks
+WebEnhancer
+DittoSpyder
+Harvest/1.5
+TeleportPro
+RMA
+BecomeBot
+mozilla/3
+scooter
+True_Robot
+Aqua_Products
+b2w/0.1
+BotALot
+WebmasterWorldForumBot
+LinkScan/8.1a Unix
+Enterprise_Search/1.0
+Copernic
+Flaming AttackBot
+cosmos
+NICErsPRO
+Openbot
+Microsoft URL Control
+EmailSiphon
+grub
+Stanford CompClub
+Teoma
+Kenjin Spider
+Foobot
+True_Robot/1.0
+LexiBot
+Stanford
+CherryPickerElite/1.0
+MSIECrawler
+Oracle Ultra Search
+mozilla/5
+LinkWalker
+larbin
+Zeus Link Scout
+Stanford Spiderboys
+Alexibot
+Crescent
+BlekkoBot
+Mister PiX
+Website Quester
+searchpreview
+http://www.WebmasterWorld.com bot
+Wget
+Crescent Internet ToolPak HTTP OLE Control v.1.0
+Web Image Collector
+lwp-trivial/1.34
+CherryPicker
+QueryN Metasearch
+Nutch
+Mata Hari
+dotbot
+Bookmark search tool
+The Intraformant
+toCrawl/UrlDispatcher
+Gaisbot
+WebBandit
+RepoMonkey Bait & Tackle/v1.01
+MIIxpc/4.2
+Bullseye/1.0
+BuiltBotTough
+Enterprise_Search
+BlowFish/1.0
+asterias
+lwp-trivial
+dumbot
+Iron33/1.0.2
+Zeus
+JennyBot
+VCI
+URL Control
+hloader
+Mozilla/4.0 (compatible; MSIE 4.0; Windows 95)
+EroCrawler
+BunnySlippers
+libWeb/clsHTTP
+Radiation Retriever 1.1
+Microsoft URL Control - 6.00.8169
+Offline Explorer
+MJ12bot
+Stanford CompSciClub
+LinkextractorPro
+Mozilla/4.0 (compatible; MSIE 4.0; Windows XP)
+Szukacz/1.4
+SiteSnagger
+ProWebWalker
+NetAnts
+InfoNaviRobot
+Telesoft
+WebZip/4.0
+WebSauger
+MIIxpc
+httplib
+WebStripper
+WebVac
+URLy Warning
+Mozilla/4.0 (compatible; MSIE 4.0; Windows NT)
+Openfind data gathere
+looksmart
+PostmanRuntime/7.24.0
+
