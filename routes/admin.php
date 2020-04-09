@@ -18,16 +18,9 @@ use App\Http\Controllers\BlackList\EmailController;
 
 
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+    Route::prefix('blacklist')->group(function () {
 
+        Route::post('useragent', [UserAgentController::class, 'verify'])->name('blacklist.useragent');
+        Route::post('emailprovider', [EmailController::class, 'verify'])->name('blacklist.email');
+    });
 
-
-Route::prefix('validate')->group(function () {
-
-    Route::post('useragent', [UserAgentController::class, 'verify'])->name('blacklist.useragent');
-    Route::post('email', [EmailController::class, 'verify'])->name('blacklist.email');
-
-
-});
