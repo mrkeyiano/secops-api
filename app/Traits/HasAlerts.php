@@ -30,7 +30,7 @@ trait HasAlerts
             $response['data'] = $data;
         }
 
-        return Response::json($response, 301);
+        return Response::json($response, 200);
     }
 
     /**
