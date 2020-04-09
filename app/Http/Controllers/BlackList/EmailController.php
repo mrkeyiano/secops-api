@@ -25,8 +25,10 @@ class EmailController extends Controller
 
 
         if(array_search($emailProvider, $emailProviders) === false) {
+
             return $this->successAlert('This Email Provider is not blacklisted');
         }
+
 
         return $this->failedAlert('This Email Provider has been blacklisted');
     }
