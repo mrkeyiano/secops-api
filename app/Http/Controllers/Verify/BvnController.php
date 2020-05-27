@@ -60,7 +60,6 @@ class BvnController extends Controller
 
 
         $data = [
-            'title' => ucfirst($response['data']['title']),
             'firstname' => ucwords(strtolower($response['data']['firstName'])),
             'middlename' => ucwords(strtolower($response['data']['middleName'])),
             'lastname' => ucwords(strtolower($response['data']['lastName'])),
