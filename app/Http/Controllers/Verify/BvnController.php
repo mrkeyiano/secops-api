@@ -90,6 +90,7 @@ class BvnController extends Controller
 
 
         $data = [
+            'bvn' => $response['data']['bvn'],
             'firstname' => ucwords(strtolower($response['data']['firstName'])),
             'middlename' => ucwords(strtolower($response['data']['middleName'])),
             'lastname' => ucwords(strtolower($response['data']['lastName'])),
@@ -98,7 +99,7 @@ class BvnController extends Controller
             'phonenumber2' => $response['data']['phoneNumber2'],
             'email' => $response['data']['email'],
             'gender' => ucfirst($response['data']['gender']),
-            'dateofbirth' => $response['data']['dateOfBirth'],
+            'nationality' => $response['data']['nationality'],
             'stateofresidence' => ucfirst(strtolower($response['data']['stateOfResidence'])),
             'lgaofResidence' => ucfirst(strtolower($response['data']['lgaOfResidence'])),
             'residentialAddress' => ucwords(strtolower($response['data']['residentialAddress'])),
