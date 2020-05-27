@@ -100,6 +100,7 @@ class BvnController extends Controller
             'email' => $response['data']['email'],
             'gender' => ucfirst($response['data']['gender']),
             'nationality' => $response['data']['nationality'],
+            'enrollmentBranch' => $response['data']['enrollmentBranch'],
             'stateofresidence' => ucfirst(strtolower($response['data']['stateOfResidence'])),
             'lgaofResidence' => ucfirst(strtolower($response['data']['lgaOfResidence'])),
             'residentialAddress' => ucwords(strtolower($response['data']['residentialAddress'])),
