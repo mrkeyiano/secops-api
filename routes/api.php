@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlackList\UserAgentController;
 use App\Http\Controllers\BlackList\EmailController;
+use App\Http\Controllers\Verify\BvnController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +24,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+
+
+Route::prefix('verify')->group(function () {
+   Route::post('bvn', [BvnController::class, 'verify'])->name('verify.bvn');
+});
 
 Route::prefix('validate')->group(function () {
 

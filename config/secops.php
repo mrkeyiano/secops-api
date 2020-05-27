@@ -2,8 +2,12 @@
 
 return
     // Statuses
+    ['rubies_open_api' => [
+    'key' => env('RUBIES_OPEN_API_KEY'),
+    'root_url' => env('RUBIES_OPEN_API_ROOT_URL')
+    ],
 
-    ['status' => [
+    'status' => [
         'failed' => 'failed',
         'success' => 'success',
         'not_found' => 'notfound',
@@ -24,5 +28,6 @@ return
         'not_allowed' => '403',
         'duplicate_transaction' => '07',
     ],
-];
+        ];
+
 
