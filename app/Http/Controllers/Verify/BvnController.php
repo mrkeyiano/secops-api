@@ -19,17 +19,23 @@ class BvnController extends Controller
 
     public function verify(BvnRequest $request) {
 
-        $reference = 'secops_'.Str::uuid();
+       // $reference = 'secops_'.Str::uuid();
+
+        $requestid = rand().rand();
+
 
         $fetchDetails = Http::withHeaders([
-            'Authorization' => config('secops.rubies_open_api.key'),
+            'Authorization' => config('secops.rubies.key'),
             'Content-Type' => 'application/json'
-        ])->post(config('secops.rubies_open_api.root_url').'/verifybvn', [
+        ])->post(config('secops.rubies.rubies_bvn_checker'), [
             'bvn' => $request->bvn,
-            'reference' => $reference,
+            'requestid' => $requestid,
         ]);
 
+
         $response = $fetchDetails->json();
+
+
         Log::info($response);
 
 
@@ -45,20 +51,26 @@ class BvnController extends Controller
         }
 
 
-        if($response['responsecode'] !== "00") {
+        if($response['responsecode'] !== "200") {
+            Log::error($response);
+
             return $this->failedAlert('Service currently unavailable, please try again later.');
 
         }
 
 
         $data = [
+            'title' => $response['data']['title'],
             'firstname' => $response['data']['firstName'],
             'middlename' => $response['data']['middleName'],
             'lastname' => $response['data']['lastName'],
+            'phonenumber' => $response['phoneNumber'],
+            'second_phonenumber' => $response['data']['phoneNumber2'],
+            'email' => $response['data']['email'],
             'gender' => $response['data']['gender'],
             'dateofbirth' => $response['data']['dateOfBirth'],
-            'phonenumber' => $response['phoneNumber'],
-            'base64image' => $response['base64Image'],
+            'residentialAddress' => $response['data']['residentialAddress'],
+            'base64image' => $response['data']['base64Image'],
         ];
 
 

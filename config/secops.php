@@ -2,9 +2,10 @@
 
 return
     // Statuses
-    ['rubies_open_api' => [
+    ['rubies' => [
     'key' => env('RUBIES_OPEN_API_KEY'),
-    'root_url' => env('RUBIES_OPEN_API_ROOT_URL')
+    'root_url' => env('RUBIES_OPEN_API_ROOT_URL'),
+    'rubies_bvn_checker' => env('RUBIES_BVN_CHECKER'),
     ],
 
     'status' => [
