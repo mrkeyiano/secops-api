@@ -24,14 +24,16 @@ class BvnRequest extends FormRequest
     public function rules()
     {
         return [
-            'bvn' => 'required|digits_between:11,12',
+            'bvn' => 'required_without_all:accountNumber|digits_between:11,12',
+            'accountNumber' => 'required_without_all:bvn|digits_between:10,11',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'bvn.required' => 'Bvn must be supplied',
+            'bvn.required' => 'Valid Bvn must be supplied',
+            'accountNumber.required' => 'Valid Account Number must be supplied',
         ];
     }
 }

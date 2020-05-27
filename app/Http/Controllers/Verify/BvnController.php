@@ -19,7 +19,36 @@ class BvnController extends Controller
 
     public function verify(BvnRequest $request) {
 
+
        // $reference = 'secops_'.Str::uuid();
+
+
+        if(isset($request->accountNumber)) {
+
+            $fetchbvn = Http::withHeaders([
+                'Authorization' => config('secops.rubies.key'),
+                'Content-Type' => 'application/json'
+            ])->post(config('secops.rubies.root_url'), [
+                'accountnumber' => $request->accountNumber,
+                'bankcode' => $request->bankcode,
+            ])->json()['bvn'];
+
+            if(isset($fetchbvn)) {
+                $bvn = $fetchbvn;
+            } else {
+                return $this->failedAlert('Name Enquiry service currently unavailable, please try again later.');
+
+
+            }
+
+
+
+        } else {
+            $bvn = $request->bvn;
+        }
+
+
+
 
         $requestid = rand().rand();
 
@@ -28,7 +57,7 @@ class BvnController extends Controller
             'Authorization' => config('secops.rubies.key'),
             'Content-Type' => 'application/json'
         ])->post(config('secops.rubies.rubies_bvn_checker'), [
-            'bvn' => $request->bvn,
+            'bvn' => $bvn,
             'requestid' => $requestid,
         ]);
 
