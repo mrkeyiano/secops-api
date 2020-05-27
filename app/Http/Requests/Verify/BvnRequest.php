@@ -26,6 +26,7 @@ class BvnRequest extends FormRequest
         return [
             'bvn' => 'required_without_all:accountNumber|digits_between:11,12',
             'accountNumber' => 'required_without_all:bvn|digits_between:10,11',
+            'bankcode' => 'required_with:accountNumber|digits_between:3,6',
         ];
     }
 
