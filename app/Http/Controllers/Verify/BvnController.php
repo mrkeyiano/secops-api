@@ -34,11 +34,21 @@ class BvnController extends Controller
 
 
 
-        if(!isset($response['responsecode']) || $response['responsecode'] != "00") {
+        if(!isset($response['responsecode'])) {
             Log::error($response);
-            return $this->failedAlert('Service Unavailable');
+            return $this->failedAlert('Service currently unavailable, please try again later.');
         }
 
+        if($response['responsecode'] === "91") {
+            return $this->failedAlert('Bvn is invalid, please check and try again.');
+
+        }
+
+
+        if($response['responsecode'] !== "00") {
+            return $this->failedAlert('Service currently unavailable, please try again later.');
+
+        }
 
 
         $data = [
