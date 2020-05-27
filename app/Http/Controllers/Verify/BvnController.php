@@ -69,6 +69,8 @@ class BvnController extends Controller
             'email' => $response['data']['email'],
             'gender' => $response['data']['gender'],
             'dateofbirth' => $response['data']['dateOfBirth'],
+            'stateofresidence' => $response['data']['stateOfResidence'],
+            'lgaofResidence' => $response['data']['lgaOfResidence'],
             'residentialAddress' => $response['data']['residentialAddress'],
             'base64image' => $response['data']['base64Image'],
         ];
