@@ -60,18 +60,18 @@ class BvnController extends Controller
 
 
         $data = [
-            'title' => $response['data']['title'],
-            'firstname' => $response['data']['firstName'],
-            'middlename' => $response['data']['middleName'],
-            'lastname' => $response['data']['lastName'],
+            'title' => ucfirst($response['data']['title']),
+            'firstname' => ucwords(strtolower($response['data']['firstName'])),
+            'middlename' => ucwords(strtolower($response['data']['middleName'])),
+            'lastname' => ucwords(strtolower($response['data']['lastName'])),
             'phonenumber' => $response['phoneNumber'],
             'second_phonenumber' => $response['data']['phoneNumber2'],
             'email' => $response['data']['email'],
-            'gender' => $response['data']['gender'],
+            'gender' => ucfirst($response['data']['gender']),
             'dateofbirth' => $response['data']['dateOfBirth'],
-            'stateofresidence' => $response['data']['stateOfResidence'],
-            'lgaofResidence' => $response['data']['lgaOfResidence'],
-            'residentialAddress' => $response['data']['residentialAddress'],
+            'stateofresidence' => ucfirst(strtolower($response['data']['stateOfResidence'])),
+            'lgaofResidence' => ucfirst(strtolower($response['data']['lgaOfResidence'])),
+            'residentialAddress' => ucwords(strtolower($response['data']['residentialAddress'])),
             'base64image' => $response['data']['base64Image'],
         ];
 
