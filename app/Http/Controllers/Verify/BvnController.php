@@ -28,7 +28,9 @@ class BvnController extends Controller
             $fetchbvn = Http::withHeaders([
                 'Authorization' => config('secops.rubies.key'),
                 'Content-Type' => 'application/json'
-            ])->post(config('secops.rubies.root_url').'/nameenquiry', [
+            ])->withOptions([
+                    'verify' => false,
+                ])->post(config('secops.rubies.root_url').'/nameenquiry', [
                 'accountnumber' => $request->accountNumber,
                 'bankcode' => $request->bankcode,
             ])->json()['bvn'];
@@ -57,6 +59,8 @@ class BvnController extends Controller
         $fetchDetails = Http::withHeaders([
             'Authorization' => config('secops.rubies.key'),
             'Content-Type' => 'application/json'
+        ])->withOptions([
+            'verify' => false,
         ])->post(config('secops.rubies.rubies_bvn_checker'), [
             'bvn' => $bvn,
             'requestid' => $requestid,
