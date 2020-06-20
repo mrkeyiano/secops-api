@@ -66,7 +66,7 @@ class BvnController extends Controller
             'requestid' => $requestid,
         ]);
 
-        dd($fetchDetails);
+        Log::info($fetchDetails);
 
 
         $response = $fetchDetails->json();
