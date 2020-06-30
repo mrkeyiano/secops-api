@@ -21,7 +21,7 @@ class BvnController extends Controller
 
     public function verify(BvnRequest $request) {
         dd(
-            $request->server('SERVER_ADDR')
+            $request->server('REMOTE_ADDR')
     );
 
 
