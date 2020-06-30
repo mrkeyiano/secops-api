@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\HasAlerts;
+use Carbon\Carbon;
+use phpseclib\Crypt\RSA as Crypt_RSA;
 
 
 class BvnController extends Controller
@@ -18,6 +20,7 @@ class BvnController extends Controller
 
 
     public function verify(BvnRequest $request) {
+        dd($request->getClientIp());
 
 
        // $reference = 'secops_'.Str::uuid();
@@ -50,9 +53,72 @@ class BvnController extends Controller
             $bvn = $request->bvn;
         }
 
+      //  $this->rubiesBVN($bvn);
+
+        $this->smileBVN($bvn);
 
 
 
+
+
+    }
+
+    public function smileBVN($bvn) {
+
+        $partnerID = 437;
+        $timestamp = Carbon::now()->timestamp;
+        $toHash = $partnerID . ':' . $timestamp;
+        $hash256 = hash('sha256', $toHash);
+        $key = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FEdEd3Qk5SRk1IUGhyN1RwQUpRNUVSbXVGaAp2ek5yTTVpMGpzbWw4Mk84RE9STVlzc0ZEMkUzU05RNmkxZmRjd1RteE9xODU4dlg0Y3BOR3lOQmNmWG1JQ21yCmJwRVhlcHZXQUw1Q3RFMDNyQUtGTVErUzIyNUZIU21sbnJaY2pFdlNJK1k4Y2tLVllFbmJJdGRmMVBUWDVya1cKRTZocjE1UW9rUmFuTjlKRFd3SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=";
+
+
+
+        $ok= openssl_public_encrypt($hash256,$encrypted,base64_decode($key));
+
+        $result = openssl_verify($hash256, $encrypted, base64_decode($key));
+        dd($encrypted, $result, $timestamp, time());
+
+        // $pkEncrypted2 = base64_encode($this->ssl_encrypt($hash256, 'public', base64_decode($key)));
+        //  $pkEncrypted = base64_encode($this->rsa_encrypt($hash256,base64_decode($key)));
+
+         // dd($pkEncrypted,$pkEncrypted2, $timestamp, Carbon::now()->timestamp);
+
+        $signature = $pkEncrypted . "|" . $hash256;
+
+
+        $jsonData = [
+            "partner_id" => "437",
+    "timestamp" => $timestamp,
+    "sec_key" => $signature,
+    "country" => "NG",
+    "id_type" => "BVN",
+    "id_number" => $bvn,
+    "first_name" => "",
+    "middle_name" => "",
+    "last_name" => "",
+    "phone_number" => "",
+    "dob" => "",
+    "partner_params" => [
+            "job_id" => "eegewgewg",
+      "user_id" => "3535353dd",
+      "job_type" => 5,
+        ],
+];
+
+
+        $fetchDetails = Http::withHeaders([
+           // 'Authorization' => config('secops.rubies.key'),
+            'Content-Type' => 'application/json'
+        ])->withOptions([
+            'verify' => false,
+        ])->post("https://3eydmgh10d.execute-api.us-west-2.amazonaws.com/test/id_verification", $jsonData);
+
+        dd($fetchDetails);
+
+
+    }
+
+    public function rubiesBVN($bvn) {
         $requestid = rand().rand();
 
 
@@ -65,6 +131,8 @@ class BvnController extends Controller
             'bvn' => $bvn,
             'requestid' => $requestid,
         ]);
+
+        dd($fetchDetails);
 
         Log::info($fetchDetails);
 
@@ -118,7 +186,39 @@ class BvnController extends Controller
 
 
 
-
     }
-    //
+
+
+    public function rsa_encrypt($data, $publickey) {
+
+
+        $rsa = new Crypt_RSA();
+        $rsa->loadKey($publickey);
+        $rsa->setEncryptionMode(2);
+        $output = $rsa->encrypt($data);
+
+        return $output;
+    }
+    public function ssl_encrypt($source,$type,$key){
+
+//        $maxlength=117;
+            $output='';
+//        while($source){
+//            $input= substr($source,0,$maxlength);
+//            $source=substr($source,$maxlength);
+//            if($type=='private'){
+//                $ok= openssl_private_encrypt($input,$encrypted,$key);
+//            }else{
+//                $ok= openssl_public_encrypt($input,$encrypted,$key);
+//            }
+
+
+      //  $result = openssl_verify($data, $raw_signature, $key);
+            $ok= openssl_public_encrypt($source,$encrypted,$key);
+
+            $output.=$encrypted;
+        //}
+        return $output;
+    }
+
 }
