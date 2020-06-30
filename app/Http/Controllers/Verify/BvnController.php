@@ -20,7 +20,9 @@ class BvnController extends Controller
 
 
     public function verify(BvnRequest $request) {
-        dd($request->getClientIp());
+        dd(
+            $request->server('SERVER_ADDR')
+    );
 
 
        // $reference = 'secops_'.Str::uuid();
