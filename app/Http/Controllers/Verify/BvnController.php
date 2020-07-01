@@ -20,9 +20,7 @@ class BvnController extends Controller
 
 
     public function verify(BvnRequest $request) {
-        dd(
-            $request->server('REMOTE_ADDR')
-    );
+
 
 
        // $reference = 'secops_'.Str::uuid();
@@ -55,6 +53,7 @@ class BvnController extends Controller
             $bvn = $request->bvn;
         }
 
+
       //  $this->rubiesBVN($bvn);
 
         $this->smileBVN($bvn);
@@ -75,17 +74,25 @@ class BvnController extends Controller
 
 
 
-        $ok= openssl_public_encrypt($hash256,$encrypted,base64_decode($key));
+   //     $ok= openssl_public_encrypt($hash256,$encrypted,base64_decode($key));
 
-        $result = openssl_verify($hash256, $encrypted, base64_decode($key));
-        dd($encrypted, $result, $timestamp, time());
+     //   $result = openssl_verify($hash256, $encrypted, base64_decode($key));
 
         // $pkEncrypted2 = base64_encode($this->ssl_encrypt($hash256, 'public', base64_decode($key)));
         //  $pkEncrypted = base64_encode($this->rsa_encrypt($hash256,base64_decode($key)));
 
          // dd($pkEncrypted,$pkEncrypted2, $timestamp, Carbon::now()->timestamp);
 
-        $signature = $pkEncrypted . "|" . $hash256;
+       // $signature = $pkEncrypted . "|" . $hash256;
+
+
+        $fetchsignature = Http::get('http://localhost:2021/smile/encrypt');
+
+        dd($fetchsignature);
+
+        $timestamp = $fetchsignature->timestamp;
+        $signature = $fetchsignature->signature;
+
 
 
         $jsonData = [
