@@ -86,7 +86,7 @@ class BvnController extends Controller
        // $signature = $pkEncrypted . "|" . $hash256;
 
 
-        $fetchsignature = Http::get('http://127.0.0.1:2021/smile/encrypt');
+        $fetchsignature = Http::get('127.0.0.1:2021/smile/encrypt');
 
         dd($fetchsignature);
 
