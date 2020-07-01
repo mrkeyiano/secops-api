@@ -21,14 +21,9 @@ class BvnController extends Controller
 
     public function verify(BvnRequest $request) {
 
-
-
-       // $reference = 'secops_'.Str::uuid();
-
-
         if(isset($request->accountNumber)) {
 
-            $fetchbvn = Http::withHeaders([
+            $fetch = Http::withHeaders([
                 'Authorization' => config('secops.rubies.key'),
                 'Content-Type' => 'application/json'
             ])->withOptions([
@@ -36,13 +31,29 @@ class BvnController extends Controller
                 ])->post(config('secops.rubies.root_url').'/nameenquiry', [
                 'accountnumber' => $request->accountNumber,
                 'bankcode' => $request->bankcode,
-            ])->json()['bvn'];
+            ]);
 
-
-            if(isset($fetchbvn)) {
-                $bvn = $fetchbvn;
-            } else {
+            if(!isset($fetch)) {
+                Log::error($fetch);
                 return $this->failedAlert('Name Enquiry service currently unavailable, please try again later.');
+
+            }
+
+            if(isset($fetch->json()["responsemessage"]) && $fetch->json()["responsemessage"] !== "success") {
+
+
+                return $this->failedAlert('Failed Name Enquiry Request, please send request with valid details or try again later.');
+
+            }
+
+
+
+            if(isset($fetch->json()["bvn"]) && !empty($fetch->json()["bvn"])) {
+                $bvn = $fetch->json()["bvn"];
+            } else {
+
+
+                return $this->failedAlert('BVN service is currently unavailable for this request, please try again later.');
 
 
             }
@@ -56,7 +67,7 @@ class BvnController extends Controller
 
       //  $this->rubiesBVN($bvn);
 
-        $this->smileBVN($bvn);
+        return $this->smileBVN($bvn);
 
 
 
@@ -66,32 +77,21 @@ class BvnController extends Controller
 
     public function smileBVN($bvn) {
 
-        $partnerID = 437;
-        $timestamp = Carbon::now()->timestamp;
-        $toHash = $partnerID . ':' . $timestamp;
-        $hash256 = hash('sha256', $toHash);
-        $key = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FEdEd3Qk5SRk1IUGhyN1RwQUpRNUVSbXVGaAp2ek5yTTVpMGpzbWw4Mk84RE9STVlzc0ZEMkUzU05RNmkxZmRjd1RteE9xODU4dlg0Y3BOR3lOQmNmWG1JQ21yCmJwRVhlcHZXQUw1Q3RFMDNyQUtGTVErUzIyNUZIU21sbnJaY2pFdlNJK1k4Y2tLVllFbmJJdGRmMVBUWDVya1cKRTZocjE1UW9rUmFuTjlKRFd3SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=";
+        $partnerID = config('secops.smile.partner_id');
+        $key = config('secops.smile.api_key');
 
 
+        $fetchsignature = Http::withHeaders([
+            'Content-Type' => 'application/json'
+        ])->withOptions([
+            'verify' => false,
+        ])->post(config('secops.encryption.root_url').'/smile/generate/seckey', [
+            'apiKey' => $key,
+            'partnerId' => $partnerID,
+        ])->json();
 
-   //     $ok= openssl_public_encrypt($hash256,$encrypted,base64_decode($key));
-
-     //   $result = openssl_verify($hash256, $encrypted, base64_decode($key));
-
-        // $pkEncrypted2 = base64_encode($this->ssl_encrypt($hash256, 'public', base64_decode($key)));
-        //  $pkEncrypted = base64_encode($this->rsa_encrypt($hash256,base64_decode($key)));
-
-         // dd($pkEncrypted,$pkEncrypted2, $timestamp, Carbon::now()->timestamp);
-
-       // $signature = $pkEncrypted . "|" . $hash256;
-
-
-        $fetchsignature = Http::get('https://encryption.patriciadev.com/smile/encrypt');
-
-        dd($fetchsignature);
-
-        $timestamp = $fetchsignature->timestamp;
-        $signature = $fetchsignature->signature;
+        $timestamp = $fetchsignature['timestamp'];
+        $signature = $fetchsignature['sec_key'];
 
 
 
@@ -108,22 +108,57 @@ class BvnController extends Controller
     "phone_number" => "",
     "dob" => "",
     "partner_params" => [
-            "job_id" => "eegewgewg",
-      "user_id" => "3535353dd",
+            "job_id" => 'PAT'.Str::uuid(),
+      "user_id" => "PAT".rand(),
       "job_type" => 5,
         ],
 ];
 
 
-        $fetchDetails = Http::withHeaders([
-           // 'Authorization' => config('secops.rubies.key'),
+        $response = Http::withHeaders([
             'Content-Type' => 'application/json'
         ])->withOptions([
             'verify' => false,
-        ])->post("https://3eydmgh10d.execute-api.us-west-2.amazonaws.com/test/id_verification", $jsonData);
+        ])->post(config('secops.smile.root_url')."/id_verification", $jsonData)->json();
 
-        dd($fetchDetails);
 
+
+        if(!isset($response['ResultCode'])) {
+            Log::error($response);
+            return $this->failedAlert('Service currently unavailable, please try again later.');
+        }
+
+
+        if($response['ResultCode'] != "1012") {
+            Log::error($response);
+            return $this->failedAlert('Service currently unavailable, please try again later.');
+        }
+
+
+        Log::info($response);
+
+
+        $data = [
+            'bvn' => $response['FullData']['BVN'],
+            'firstname' => ucwords(strtolower($response['FullData']['FirstName'])),
+            'middlename' => ucwords(strtolower($response['FullData']['MiddleName'])),
+            'lastname' => ucwords(strtolower($response['FullData']['LastName'])),
+            'dateofbirth' => ucwords(strtolower($response['FullData']['DateOfBirth'])),
+            'maritalStatus' => ucwords(strtolower($response['FullData']['maritalStatus'])),
+            'phonenumber' => $response['FullData']['PhoneNumber1'],
+            'phonenumber2' => $response['FullData']['PhoneNumber2'],
+            'email' => $response['FullData']['email'],
+            'gender' => ucfirst($response['FullData']['Gender']),
+            'nationality' => $response['FullData']['nationality'],
+            'enrollmentBranch' => $response['FullData']['enrollmentBranch'],
+            'stateofresidence' => ucfirst(strtolower($response['FullData']['stateOfResidence'])),
+            'lgaofResidence' => ucfirst(strtolower($response['FullData']['lgaOfResidence'])),
+            'residentialAddress' => ucwords(strtolower($response['FullData']['residentialAddress'])),
+            'base64image' => $response['FullData']['ImageBase64'],
+        ];
+
+
+        return $this->successAlert('Request was successful', $data);
 
     }
 
@@ -206,27 +241,6 @@ class BvnController extends Controller
         $rsa->setEncryptionMode(2);
         $output = $rsa->encrypt($data);
 
-        return $output;
-    }
-    public function ssl_encrypt($source,$type,$key){
-
-//        $maxlength=117;
-            $output='';
-//        while($source){
-//            $input= substr($source,0,$maxlength);
-//            $source=substr($source,$maxlength);
-//            if($type=='private'){
-//                $ok= openssl_private_encrypt($input,$encrypted,$key);
-//            }else{
-//                $ok= openssl_public_encrypt($input,$encrypted,$key);
-//            }
-
-
-      //  $result = openssl_verify($data, $raw_signature, $key);
-            $ok= openssl_public_encrypt($source,$encrypted,$key);
-
-            $output.=$encrypted;
-        //}
         return $output;
     }
 
